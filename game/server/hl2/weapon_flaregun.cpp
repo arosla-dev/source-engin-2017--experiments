@@ -1,4 +1,4 @@
-//========= Copyright Valve Corporation, All rights reserved. ============//
+//========= Copyright  1996-2005, Valve Corporation, All rights reserved. ============//
 //
 // Purpose:		Flare gun (fffsssssssssss!!)
 //
@@ -17,27 +17,6 @@
 
 // memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/memdbgon.h"
-
-
-/********************************************************************
- NOTE: if you are looking at this file becase you would like flares 
- to be considered as fires (and thereby trigger gas traps), be aware 
- that the env_flare class is actually found in weapon_flaregun.cpp 
- and is really a repurposed piece of ammunition. (env_flare isn't the 
- rod-like safety flare prop, but rather the bit of flame on the end.)
-
- You will have some difficulty making it work here, because CFlare 
- does not inherit from CFire and will thus not be enumerated by 
- CFireSphere::EnumElement(). In order to have flares be detected and 
- used by this system, you will need to promote certain member functions 
- of CFire into an interface class from which both CFire and CFlare 
- inherit. You will also need to modify CFireSphere::EnumElement so that
- it properly disambiguates between fires and flares.
-
- For some partial work towards this end, see changelist 192474.
-
- ********************************************************************/
-
 
 #define	FLARE_LAUNCH_SPEED	1500
 
@@ -434,7 +413,7 @@ void CFlare::FlareTouch( CBaseEntity *pOther )
 		//Only do this on the first bounce
 		if ( m_nBounces == 0 )
 		{
-			const surfacedata_t *pdata = physprops->GetSurfaceData( tr.surface.surfaceProps );	
+			surfacedata_t *pdata = physprops->GetSurfaceData( tr.surface.surfaceProps );	
 
 			if ( pdata != NULL )
 			{
@@ -657,8 +636,6 @@ void CFlare::AddToActiveFlares( void )
 	}
 }
 
-#if 0
-
 IMPLEMENT_SERVERCLASS_ST(CFlaregun, DT_Flaregun)
 END_SEND_TABLE()
 
@@ -751,5 +728,3 @@ void CFlaregun::SecondaryAttack( void )
 
 	WeaponSound( SINGLE );
 }
-
-#endif
